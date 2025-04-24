@@ -5,6 +5,10 @@ app = FastAPI()
 genai.configure(api_key="your-api-key-here")  # Replace with your actual API key
 model = genai.GenerativeModel("gemini-2.0-flash")
 
+#   Make a POST request to /ask-model with a JSON body like:
+#    {
+#        "prompt": "Which of these articles is best for learning about creatine?"
+#    }
 
 # ======= AI =======
 @app.post("/ask-model")
