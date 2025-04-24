@@ -1,9 +1,23 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
+import google.generativeai as genai
 
 app = FastAPI()
+genai.configure(api_key="your-api-key-here")  # Replace with your actual API key
+model = genai.GenerativeModel("gemini-2.0-flash")
+
+
+# ======= AI =======
+@app.post("/ask-model")
+async def ask_model(prompt: str = Body(...)):
+    articles_str = "\n".join(articles)
+    full_prompt = f"Here are some article titles:\n{articles_str}\n\nQuestion: {prompt}"
+    response = model.generate_content(full_prompt)
+    return {"response": response.text}
 
 # ======= ARTICLES =======
-articles = []
+articles = ["Creatine supplementation and exercise performance: a meta-analysis", ""
+"Muscle hypertrophy and strength gains during resistance training in older adults: a systematic review and meta-analysis",
+"Effects of protein supplementation on muscle mass and strength in older adults: a systematic review and meta-analysis", "The effects of omega-3 fatty acids on muscle mass and strength in older adults: a systematic review and meta-analysis", "Vitamin D supplementation and muscle strength in older adults: a systematic review and meta-analysis"]
 
 @app.get("/get-studies")
 async def getList():
@@ -52,3 +66,5 @@ async def addComment(comment: str):
 async def removeComment(index: int):
     comments.pop(index)
     return {"Comment removed. Total Count:": len(comments)}
+
+
