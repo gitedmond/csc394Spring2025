@@ -1,9 +1,19 @@
 from fastapi import FastAPI, Body
 import google.generativeai as genai
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 genai.configure(api_key="your-api-key-here")  # Replace with your actual API key
 model = genai.GenerativeModel("gemini-2.0-flash")
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 #   Make a POST request to /ask-model with a JSON body like:
 #    {
